@@ -15,10 +15,12 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AvailablePlacesComponent implements OnInit {
   places = signal<Place[] | undefined>(undefined);
+  isFetching = signal<boolean>(false);
   private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
+    this.isFetching.set(true);
     const subscription = this.httpClient
       .get<{ places: Place[] }>('http://localhost:3000/places', {
         observe: 'body', //body par défaut // response pour tout le contenu de la réponse (headers, status, body...) // events permettra de check chaque étape de la requête 
@@ -30,6 +32,9 @@ export class AvailablePlacesComponent implements OnInit {
         next: (places) => {
           console.log(places);
           this.places.set(places);
+        },
+        complete: () => {
+          this.isFetching.set(false);
         }
       });
 

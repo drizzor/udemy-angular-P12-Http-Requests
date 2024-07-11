@@ -1,5 +1,28 @@
 <app-places-container title="Available Places">
-  @if (places()) {
+  @if (isFetching()) {
+  <p class="fallback-text">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="width: 100px;">
+      <circle fill="#8FEEFF" stroke="#8FEEFF" stroke-width="15" r="15" cx="40" cy="100" data-darkreader-inline-stroke=""
+        style="--darkreader-inline-stroke: #ff6dff; --darkreader-inline-fill: #ff6dff;" data-darkreader-inline-fill="">
+        <animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1"
+          repeatCount="indefinite" begin="-.4"></animate>
+      </circle>
+      <circle fill="#8FEEFF" stroke="#8FEEFF" stroke-width="15" r="15" cx="100" cy="100"
+        data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: #ff6dff; --darkreader-inline-fill: #ff6dff;"
+        data-darkreader-inline-fill="">
+        <animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1"
+          repeatCount="indefinite" begin="-.2"></animate>
+      </circle>
+      <circle fill="#8FEEFF" stroke="#8FEEFF" stroke-width="15" r="15" cx="160" cy="100"
+        data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: #ff6dff; --darkreader-inline-fill: #ff6dff;"
+        data-darkreader-inline-fill="">
+        <animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1"
+          repeatCount="indefinite" begin="0"></animate>
+      </circle>
+    </svg>
+  </p>
+  }
+  @if (places() && !isFetching()) {
   <app-places [places]="places()!" />
   } @else if (places()?.length === 0) {
   <p class="fallback-text">Unfortunately, no places could be found.</p>
