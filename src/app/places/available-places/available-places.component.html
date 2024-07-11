@@ -1,5 +1,5 @@
 <app-places-container title="Available Places">
-  @if (isFetching()) {
+  @if (isFetching() && !errorMsg()) {
   <p class="fallback-text">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="width: 100px;">
       <circle fill="#8FEEFF" stroke="#8FEEFF" stroke-width="15" r="15" cx="40" cy="100" data-darkreader-inline-stroke=""
@@ -22,6 +22,13 @@
     </svg>
   </p>
   }
+
+  @if (errorMsg()){
+  <p class="fallback-text" style="color: crimson;">
+    {{ errorMsg() }}
+  </p>
+  }
+
   @if (places() && !isFetching()) {
   <app-places [places]="places()!" />
   } @else if (places()?.length === 0) {
