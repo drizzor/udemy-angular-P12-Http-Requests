@@ -29,6 +29,7 @@ export class AvailablePlacesComponent implements OnInit {
       .pipe(
         map((resData) => resData.places),
         catchError((error) => {
+          console.log(error);
           return throwError(() => new Error('Something went wrong fetching the available places. Please try again later!'));
         }))
       .subscribe({
@@ -37,7 +38,6 @@ export class AvailablePlacesComponent implements OnInit {
           this.places.set(places);
         },
         error: (error: Error) => {
-          console.log('Cette erreur :', error);
           this.isFetching.set(false);
           this.errorMsg.set(error.message);
         },
@@ -50,5 +50,19 @@ export class AvailablePlacesComponent implements OnInit {
       console.log('Destroying AvailablePlacesComponent');
       subscription.unsubscribe();
     });
+  }
+
+  onSelectPlace(selectedPlace: Place) {
+    console.log('Selected place:', selectedPlace);
+    this.httpClient.put('http://localhost:3000/user-places/', {
+      placeId : selectedPlace.id
+    })
+    .subscribe({
+      next: (resData) => {
+        console.log('Successfully selected place:', resData);
+      },
+      error: (error) => {
+        console.log('Error selecting place:', error);
+    }});
   }
 }
