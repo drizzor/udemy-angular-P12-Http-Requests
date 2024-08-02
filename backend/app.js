@@ -40,7 +40,9 @@ app.get("/user-places", async (req, res) => {
 
 app.put("/user-places", async (req, res) => {
   await new Promise((resolve) => setTimeout(resolve, 1500));
-  
+
+  // return res.status(500).json(); // Simuler erreur de retour de données du backend
+
   const placeId = req.body.placeId;
 
   const fileContent = await fs.readFile("./data/places.json");
