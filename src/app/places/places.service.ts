@@ -32,7 +32,7 @@ export class PlacesService {
   addPlaceToUserPlaces(place: Place) {
     const prevPlaces = this.userPlaces(); // Je garde en mémoire les places déjà mises en favoris pour faire un rollback en cas d'erreur
     
-    if (!prevPlaces.some((p) => p.id === place.id)) { // empeche de mettre 2 fois la même photo en favoris
+    if(!prevPlaces.some((p) => p.id === place.id)) { // empeche de mettre 2 fois la même photo en favoris
       this.userPlaces.set([...prevPlaces, place]); // Mise à jour de la liste mise en favoris et donc ici ajout du nouveau click fav
     }
 
@@ -47,7 +47,22 @@ export class PlacesService {
     );
   }
 
-  removeUserPlace(place: Place) {}
+  removeUserPlace(place: Place) {
+    const prevPlaces = this.userPlaces();
+
+    if(prevPlaces.some((p) => p.id === place.id)) { // empeche de purger userPlace si l'id envoyé n'est pas dans la liste des fav
+      this.userPlaces.set(prevPlaces.filter(p => p.id !== place.id));
+    }
+
+    return this.httpClient.delete(`http://localhost:3000/user-places/${place.id}`)
+    .pipe(
+      catchError((error) => {
+        this.userPlaces.set(prevPlaces);
+        this.errorService.showError('Failed to remove selected place. Please try again later.');
+        return throwError(() => new Error('Failed to remove selected place. Please try again later.'));
+      })
+    );
+  }
 
   private fetchPlaces(url : string, errorMessage : string) {
     return this.httpClient
